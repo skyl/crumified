@@ -297,10 +297,9 @@ class AdminSite(object):
         # Check the password.
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=username, password=password)
         if user is None:
             message = ERROR_MESSAGE
-            '''
             if username is not None and u'@' in username:
                 # Mistakenly entered e-mail address instead of username? Look it up.
                 try:
@@ -313,7 +312,6 @@ class AdminSite(object):
                                     " Try '%s' instead.") % user.username
                     else:
                         message = _("Usernames cannot contain the '@' character.")
-            '''
             return self.display_login_form(request, message)
 
         # The user data is correct; log in the user in and continue.
