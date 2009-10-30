@@ -297,7 +297,7 @@ class AdminSite(object):
         # Check the password.
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
-        user = authenticate(email=username, password=password)
+        user = authenticate(username=username, password=password)
         if user is None:
             message = ERROR_MESSAGE
             if username is not None and u'@' in username:
