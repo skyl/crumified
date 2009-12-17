@@ -74,6 +74,9 @@ class AuthenticationForm(forms.Form):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 
+        if username and not '@' in username:
+            raise forms.ValidationError(_("Your email is your username"))
+
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
@@ -86,7 +89,10 @@ class AuthenticationForm(forms.Form):
             if not self.request.session.test_cookie_worked():
                 raise forms.ValidationError(_("Your Web browser doesn't appear to have cookies enabled. Cookies are required for logging in."))
 
-        return self.cleaned_data
+        if username and password:
+            return self.cleaned_data
+        else:
+            raise forms.ValidationError(_("You must enter a username and a password" ))
 
     def get_user_id(self):
         if self.user_cache:
