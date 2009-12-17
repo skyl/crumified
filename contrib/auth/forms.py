@@ -121,7 +121,6 @@ class PasswordResetForm(forms.Form):
         Generates a one-use only link for resetting password and sends to the user
         """
         from django.core.mail import send_mail
-        from django.conf import settings
         for user in self.users_cache:
             if not domain_override:
                 current_site = Site.objects.get_current()
@@ -139,8 +138,8 @@ class PasswordResetForm(forms.Form):
                 'token': token_generator.make_token(user),
                 'protocol': use_https and 'https' or 'http',
             }
-            send_mail(_("Reset your OCBC Cycle Singapore password"),
-                t.render(Context(c)), 'OCBC Cycle Singapore <%s>' % settings.DEFAULT_FROM_EMAIL, [user.email])
+            send_mail(_("Password reset on %s") % site_name,
+                t.render(Context(c)), None, [user.email])
 
 class SetPasswordForm(forms.Form):
     """
